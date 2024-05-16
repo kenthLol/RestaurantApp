@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantapp.R
 import com.example.restaurantapp.models.CategorieModel
 
-class HomeCategorieAdapter(private val categorieList: List<CategorieModel>) : RecyclerView.Adapter<HomeCategorieAdapter.HomeCategorieViewHolder>()
+class HomeCategorieAdapter(
+    private val categorieList: List<CategorieModel>,
+    private val clickListener: (CategorieModel) -> Unit
+) : RecyclerView.Adapter<HomeCategorieAdapter.HomeCategorieViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeCategorieViewHolder
     {
@@ -20,7 +23,7 @@ class HomeCategorieAdapter(private val categorieList: List<CategorieModel>) : Re
     override fun onBindViewHolder(holder: HomeCategorieViewHolder, position: Int)
     {
         val categorie = categorieList[position]
-        holder.bind(categorie)
+        holder.bind(categorie, clickListener)
     }
 
     override fun getItemCount(): Int
@@ -33,10 +36,11 @@ class HomeCategorieAdapter(private val categorieList: List<CategorieModel>) : Re
         private val categorieImage: ImageView = itemView.findViewById(R.id.imageView)
         private val categorieTitle: TextView = itemView.findViewById(R.id.title)
 
-        fun bind(categorie: CategorieModel)
+        fun bind(categorie: CategorieModel, clickListener: (CategorieModel) -> Unit)
         {
             categorieImage.setImageResource(categorie.image)
             categorieTitle.text = categorie.title
+            itemView.setOnClickListener { this@HomeCategorieAdapter.clickListener(categorie) }
         }
     }
 }

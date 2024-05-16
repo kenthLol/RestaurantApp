@@ -32,6 +32,7 @@ class HomeActivity : AppCompatActivity()
 
     private lateinit var homeVerticalRecyclerView: RecyclerView
     private lateinit var homeItemAdapter: HomeItemAdapter
+    private lateinit var filteredItems: List<ItemModel>
 
     private val items = listOf(
         ItemModel(
@@ -75,6 +76,10 @@ class HomeActivity : AppCompatActivity()
             "Hamburguesa de queso con carne de res",
             "Hamburguesa",
             "4.5"),
+        ItemModel(R.drawable.ic_pizza, "Pizza Margherita", 8, "Pizza clásica italiana", "Pizza", "4.7"),
+        ItemModel(R.drawable.ic_salad, "Salmon Salad", 12, "Salad with fresh salmon", "Ensalada", "5"),
+        ItemModel(R.drawable.ic_postre, "Chocolate Cake", 6, "Delicious chocolate cake", "Postre", "4.9"),
+        ItemModel(R.drawable.ic_drink, "Coca Cola", 2, "Refreshing cola drink", "Bebida", "4.0")
     )
 
 
@@ -89,11 +94,14 @@ class HomeActivity : AppCompatActivity()
 
     private fun initUI()
     {
-        homeCategoriesAdapter = HomeCategorieAdapter(categories)
+        homeCategoriesAdapter = HomeCategorieAdapter(categories) { category ->
+            filterItemsByCategory(category.title)
+        }
         homeHorizontalRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         homeHorizontalRecyclerView.adapter = homeCategoriesAdapter
 
-        homeItemAdapter = HomeItemAdapter(items)
+        filteredItems = items // Initially show all items
+        homeItemAdapter = HomeItemAdapter(filteredItems)
         homeVerticalRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         homeVerticalRecyclerView.adapter = homeItemAdapter
     }
@@ -102,5 +110,11 @@ class HomeActivity : AppCompatActivity()
     {
         homeHorizontalRecyclerView = findViewById(R.id.home_categories)
         homeVerticalRecyclerView = findViewById(R.id.homeItems)
+    }
+
+    private fun filterItemsByCategory(category: String) {
+        filteredItems = items.filter { it.category == category }
+        homeItemAdapter = HomeItemAdapter(filteredItems)
+        homeVerticalRecyclerView.adapter = homeItemAdapter
     }
 }
