@@ -82,6 +82,8 @@ class HomeActivity : AppCompatActivity()
         ItemModel(R.drawable.ic_drink, "Coca Cola", 2, "Refreshing cola drink", "Bebida", "4.0")
     )
 
+    private var selectedCategoryIndex = -1
+
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -94,8 +96,11 @@ class HomeActivity : AppCompatActivity()
 
     private fun initUI()
     {
-        homeCategoriesAdapter = HomeCategorieAdapter(categories) { category ->
+        homeCategoriesAdapter = HomeCategorieAdapter(categories, selectedCategoryIndex) { category, position ->
+            selectedCategoryIndex = position
             filterItemsByCategory(category.title)
+            homeCategoriesAdapter.selectedCategoryIndex = position
+            homeCategoriesAdapter.notifyDataSetChanged() // Notify adapter to refresh the UI
         }
         homeHorizontalRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         homeHorizontalRecyclerView.adapter = homeCategoriesAdapter

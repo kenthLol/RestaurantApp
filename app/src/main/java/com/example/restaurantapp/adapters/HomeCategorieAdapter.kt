@@ -5,13 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantapp.R
 import com.example.restaurantapp.models.CategorieModel
 
 class HomeCategorieAdapter(
     private val categorieList: List<CategorieModel>,
-    private val clickListener: (CategorieModel) -> Unit
+    public var selectedCategoryIndex: Int,
+    private val clickListener: (CategorieModel, Int) -> Unit
 ) : RecyclerView.Adapter<HomeCategorieAdapter.HomeCategorieViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeCategorieViewHolder
@@ -23,7 +26,7 @@ class HomeCategorieAdapter(
     override fun onBindViewHolder(holder: HomeCategorieViewHolder, position: Int)
     {
         val categorie = categorieList[position]
-        holder.bind(categorie, clickListener)
+        holder.bind(categorie, position, selectedCategoryIndex, clickListener)
     }
 
     override fun getItemCount(): Int
@@ -35,12 +38,23 @@ class HomeCategorieAdapter(
     {
         private val categorieImage: ImageView = itemView.findViewById(R.id.imageView)
         private val categorieTitle: TextView = itemView.findViewById(R.id.title)
+        private val cardView: CardView = itemView.findViewById(R.id.cardView)
 
-        fun bind(categorie: CategorieModel, clickListener: (CategorieModel) -> Unit)
-        {
+        fun bind(categorie: CategorieModel, position: Int, selectedIndex: Int, clickListener: (CategorieModel, Int) -> Unit) {
             categorieImage.setImageResource(categorie.image)
             categorieTitle.text = categorie.title
-            itemView.setOnClickListener { this@HomeCategorieAdapter.clickListener(categorie) }
+
+            if (position == selectedIndex) {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.green_color))
+                categorieTitle.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.white))
+            } else {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.context, android.R.color.white))
+                categorieTitle.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.black))
+            }
+
+            itemView.setOnClickListener {
+                clickListener(categorie, position)
+            }
         }
     }
 }
