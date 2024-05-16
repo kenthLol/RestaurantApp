@@ -16,7 +16,7 @@
             android:id="@+id/greetingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="10dp"
             android:fontFamily="@font/poppins_bold"
             android:text="¡Buenos días! Kenneth"
             android:textSize="20sp"
@@ -26,7 +26,7 @@
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="10dp"
             app:dividerThickness="2dp"
             app:dividerColor="@color/green_color"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
             android:id="@+id/searchBar"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/search_bg"
             android:drawableStart="@drawable/ic_search"
@@ -48,6 +48,26 @@
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/greetingText" />
+
+        <TextView
+            android:id="@+id/titleCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Categorias"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchBar"
+            android:layout_marginTop="18dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/home_categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/titleCategories"
+            android:layout_margin="10dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
