@@ -1,5 +1,6 @@
 package com.example.restaurantapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.example.restaurantapp.adapters.HomeCategorieAdapter
 import com.example.restaurantapp.adapters.HomeItemAdapter
 import com.example.restaurantapp.models.CategorieModel
 import com.example.restaurantapp.models.ItemModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeActivity : AppCompatActivity()
 {
@@ -83,6 +85,7 @@ class HomeActivity : AppCompatActivity()
     )
 
     private var selectedCategoryIndex = -1
+    private lateinit var fabAddItem: FloatingActionButton
 
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -91,7 +94,16 @@ class HomeActivity : AppCompatActivity()
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
         initComponents()
+        initListeners()
         initUI()
+    }
+
+    private fun initListeners()
+    {
+        fabAddItem.setOnClickListener {
+            val intent = Intent(this, AddItemActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initUI()
@@ -115,6 +127,7 @@ class HomeActivity : AppCompatActivity()
     {
         homeHorizontalRecyclerView = findViewById(R.id.home_categories)
         homeVerticalRecyclerView = findViewById(R.id.homeItems)
+        fabAddItem = findViewById(R.id.fabAddItem)
     }
 
     private fun filterItemsByCategory(category: String) {
