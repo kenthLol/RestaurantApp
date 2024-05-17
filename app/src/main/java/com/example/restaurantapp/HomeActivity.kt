@@ -120,7 +120,17 @@ class HomeActivity : AppCompatActivity()
         homeHorizontalRecyclerView.adapter = homeCategoriesAdapter
 
         filteredItems = items // Initially show all items
-        homeItemAdapter = HomeItemAdapter(filteredItems)
+        homeItemAdapter = HomeItemAdapter(filteredItems, object: OnItemClickListener {
+            override fun onItemClick(item: ItemModel)
+            {
+                val intent = Intent(this@HomeActivity, ItemDetailActivity::class.java)
+                intent.putExtra("ITEM_IMAGE_URI", item.image.toString())
+                intent.putExtra("ITEM_NAME", item.title)
+                intent.putExtra("ITEM_RATING", item.rating)
+                intent.putExtra("ITEM_DESCRIPTION", item.description)
+                startActivity(intent)
+            }
+        })
         homeVerticalRecyclerView.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         homeVerticalRecyclerView.adapter = homeItemAdapter
@@ -136,7 +146,17 @@ class HomeActivity : AppCompatActivity()
     private fun filterItemsByCategory(category: String)
     {
         filteredItems = items.filter { it.category == category }
-        homeItemAdapter = HomeItemAdapter(filteredItems)
+        homeItemAdapter = HomeItemAdapter(filteredItems, object: OnItemClickListener {
+            override fun onItemClick(item: ItemModel)
+            {
+                val intent = Intent(this@HomeActivity, ItemDetailActivity::class.java)
+                intent.putExtra("ITEM_IMAGE_URI", item.image.toString())
+                intent.putExtra("ITEM_NAME", item.title)
+                intent.putExtra("ITEM_RATING", item.rating)
+                intent.putExtra("ITEM_DESCRIPTION", item.description)
+                startActivity(intent)
+            }
+        })
         homeVerticalRecyclerView.adapter = homeItemAdapter
     }
 

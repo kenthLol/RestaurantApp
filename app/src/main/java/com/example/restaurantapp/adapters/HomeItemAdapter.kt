@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.restaurantapp.OnItemClickListener
 import com.example.restaurantapp.R
 import com.example.restaurantapp.models.ItemModel
 
-class HomeItemAdapter(private var itemList: List<ItemModel>) : RecyclerView.Adapter<HomeItemAdapter.HomeItemViewHolder>()
+class HomeItemAdapter(private var itemList: List<ItemModel>, private var listener: OnItemClickListener) : RecyclerView.Adapter<HomeItemAdapter.HomeItemViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder
     {
@@ -28,7 +29,7 @@ class HomeItemAdapter(private var itemList: List<ItemModel>) : RecyclerView.Adap
         return itemList.size
     }
 
-    inner class HomeItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class HomeItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener
     {
         private val itemImage: ImageView = itemView.findViewById(R.id.imageViewDish)
         private val itemTitle: TextView = itemView.findViewById(R.id.tvTitleDish)
@@ -45,6 +46,17 @@ class HomeItemAdapter(private var itemList: List<ItemModel>) : RecyclerView.Adap
             itemPrice.text = "$${item.price}"
             itemDescription.text = item.description
             itemRating.text = item.rating
+        }
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(itemList[position])
+            }
         }
     }
 
