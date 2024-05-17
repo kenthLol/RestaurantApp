@@ -38,7 +38,9 @@ class HomeItemAdapter(private var itemList: List<ItemModel>) : RecyclerView.Adap
 
         fun bind(item: ItemModel)
         {
-            itemImage.setImageResource(item.image)
+            item.image?.let { uri ->
+                itemImage.setImageURI(uri)
+            }
             itemTitle.text = item.title
             itemPrice.text = "$${item.price}"
             itemDescription.text = item.description

@@ -40,7 +40,9 @@
             android:text="Cheese Burger"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/black"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvPriceDish"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent" />
 

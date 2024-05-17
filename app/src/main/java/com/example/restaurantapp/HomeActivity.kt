@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +18,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeActivity : AppCompatActivity()
 {
-    companion object {
+    companion object
+    {
         const val ADD_ITEM_REQUEST_CODE = 1
     }
 
@@ -42,50 +44,45 @@ class HomeActivity : AppCompatActivity()
 
     private var items = mutableListOf(
         ItemModel(
-            R.drawable.burguer_cheese,
-            "Hamburguesa de queso",
-            10,
-            "Hamburguesa de queso con carne de res",
+            Uri.parse("android.resource://com.example.restaurantapp/drawable/burguer_cheese"),
+            "Hamburguesa de res",
+            150,
+            "Hamburguesa de res con lechuga, jitomate, cebolla y queso",
             "Hamburguesa",
-            "4.5"
+            "5.0"
         ),
-        ItemModel(R.drawable.burguer_cheese,
-            "Hamburguesa de queso",
-            10,
-            "Hamburguesa de queso con carne de res",
-            "Hamburguesa",
-            "4.5"
+        ItemModel(
+            Uri.parse("android.resource://com.example.restaurantapp/drawable/ic_pizza"),
+            "Pizza de peperoni",
+            200,
+            "Pizza de peperoni con queso mozzarella",
+            "Pizza",
+            "5.0"
         ),
-        ItemModel(R.drawable.burguer_cheese,
-            "Hamburguesa de queso",
-            10,
-            "Hamburguesa de queso con carne de res",
-            "Hamburguesa",
-            "4.5"
+        ItemModel(
+            Uri.parse("android.resource://com.example.restaurantapp/drawable/ic_salad"),
+            "Ensalada César",
+            100,
+            "Ensalada César con pollo, lechuga, jitomate, crutones y aderezo",
+            "Ensalada",
+            "5.0"
         ),
-        ItemModel(R.drawable.burguer_cheese,
-            "Hamburguesa de queso",
-            10,
-            "Hamburguesa de queso con carne de res",
-            "Hamburguesa",
-            "4.5"
+        ItemModel(
+            Uri.parse("android.resource://com.example.restaurantapp/drawable/ic_postre"),
+            "Pastel de chocolate",
+            80,
+            "Pastel de chocolate con fresas y crema batida",
+            "Postre",
+            "5.0"
         ),
-        ItemModel(R.drawable.burguer_cheese,
-            "Hamburguesa de queso",
-            10,
-            "Hamburguesa de queso con carne de res",
-            "Hamburguesa",
-            "4.5"),
-        ItemModel(R.drawable.burguer_cheese,
-            "Hamburguesa de queso",
-            10,
-            "Hamburguesa de queso con carne de res",
-            "Hamburguesa",
-            "4.5"),
-        ItemModel(R.drawable.ic_pizza, "Pizza Margherita", 8, "Pizza clásica italiana", "Pizza", "4.7"),
-        ItemModel(R.drawable.ic_salad, "Salmon Salad", 12, "Salad with fresh salmon", "Ensalada", "5"),
-        ItemModel(R.drawable.ic_postre, "Chocolate Cake", 6, "Delicious chocolate cake", "Postre", "4.9"),
-        ItemModel(R.drawable.ic_drink, "Coca Cola", 2, "Refreshing cola drink", "Bebida", "4.0")
+        ItemModel(
+            Uri.parse("android.resource://com.example.restaurantapp/drawable/ic_drink"),
+            "Agua de horchata",
+            20,
+            "Agua de horchata con hielo",
+            "Bebida",
+            "5.0"
+        ),
     )
 
     private var selectedCategoryIndex = -1
@@ -111,18 +108,21 @@ class HomeActivity : AppCompatActivity()
 
     private fun initUI()
     {
-        homeCategoriesAdapter = HomeCategorieAdapter(categories, selectedCategoryIndex) { category, position ->
-            selectedCategoryIndex = position
-            filterItemsByCategory(category.title)
-            homeCategoriesAdapter.selectedCategoryIndex = position
-            homeCategoriesAdapter.notifyDataSetChanged() // Notify adapter to refresh the UI
-        }
-        homeHorizontalRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        homeCategoriesAdapter =
+            HomeCategorieAdapter(categories, selectedCategoryIndex) { category, position ->
+                selectedCategoryIndex = position
+                filterItemsByCategory(category.title)
+                homeCategoriesAdapter.selectedCategoryIndex = position
+                homeCategoriesAdapter.notifyDataSetChanged() // Notify adapter to refresh the UI
+            }
+        homeHorizontalRecyclerView.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         homeHorizontalRecyclerView.adapter = homeCategoriesAdapter
 
         filteredItems = items // Initially show all items
         homeItemAdapter = HomeItemAdapter(filteredItems)
-        homeVerticalRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        homeVerticalRecyclerView.layoutManager =
+            LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         homeVerticalRecyclerView.adapter = homeItemAdapter
     }
 
@@ -133,21 +133,33 @@ class HomeActivity : AppCompatActivity()
         fabAddItem = findViewById(R.id.fabAddItem)
     }
 
-    private fun filterItemsByCategory(category: String) {
+    private fun filterItemsByCategory(category: String)
+    {
         filteredItems = items.filter { it.category == category }
         homeItemAdapter = HomeItemAdapter(filteredItems)
         homeVerticalRecyclerView.adapter = homeItemAdapter
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == ADD_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK)
+        {
             val name = data?.getStringExtra("ITEM_NAME") ?: return
             val price = data.getIntExtra("ITEM_PRICE", 0)
             val description = data.getStringExtra("ITEM_DESCRIPTION") ?: return
             val category = data.getStringExtra("ITEM_CATEGORY") ?: return
+            val imageUriString = data.getStringExtra("ITEM_IMAGE_URI")
+            val imageUri = if (imageUriString != null) Uri.parse(imageUriString) else null
 
-            val newItem = ItemModel(R.drawable.ic_pizza, name, price, description, category, "5.0") // Ajusta según sea necesario
+            val newItem = ItemModel(
+                imageUri,
+                name,
+                price,
+                description,
+                category,
+                "5.0"
+            )
 
             items.add(newItem)
             filterItemsByCategory(category)
