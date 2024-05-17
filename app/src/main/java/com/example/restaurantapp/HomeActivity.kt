@@ -36,7 +36,7 @@ class HomeActivity : AppCompatActivity()
     private lateinit var homeItemAdapter: HomeItemAdapter
     private lateinit var filteredItems: List<ItemModel>
 
-    private val items = listOf(
+    private var items = mutableListOf(
         ItemModel(
             R.drawable.burguer_cheese,
             "Hamburguesa de queso",
@@ -86,7 +86,6 @@ class HomeActivity : AppCompatActivity()
 
     private var selectedCategoryIndex = -1
     private lateinit var fabAddItem: FloatingActionButton
-
 
     override fun onCreate(savedInstanceState: Bundle?)
     {

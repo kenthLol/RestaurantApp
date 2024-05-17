@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantapp.R
 import com.example.restaurantapp.models.ItemModel
 
-class HomeItemAdapter(private val itemList: List<ItemModel>) : RecyclerView.Adapter<HomeItemAdapter.HomeItemViewHolder>()
+class HomeItemAdapter(private var itemList: List<ItemModel>) : RecyclerView.Adapter<HomeItemAdapter.HomeItemViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder
     {
