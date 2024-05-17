@@ -1,7 +1,10 @@
 package com.example.restaurantapp
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +26,27 @@ class AddItemActivity : AppCompatActivity()
         enableEdgeToEdge()
         setContentView(R.layout.activity_add_item)
         initComponents()
+        initListeners()
+    }
+
+    private fun initListeners()
+    {
+        createButton.setOnClickListener {
+            val name = itemName.text.toString()
+            val price = itemPrice.text.toString().toInt()
+            val description = itemDescription.text.toString()
+            val selectedCategoryId = categoryRadioGroup.checkedRadioButtonId
+            val category = findViewById<RadioButton>(selectedCategoryId).text.toString()
+
+            val resultIntent = Intent()
+            resultIntent.putExtra("ITEM_NAME", name)
+            resultIntent.putExtra("ITEM_PRICE", price)
+            resultIntent.putExtra("ITEM_DESCRIPTION", description)
+            resultIntent.putExtra("ITEM_CATEGORY", category)
+
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
+        }
     }
 
     private fun initComponents()

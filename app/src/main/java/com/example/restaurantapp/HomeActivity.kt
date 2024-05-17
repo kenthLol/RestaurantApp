@@ -1,5 +1,6 @@
 package com.example.restaurantapp
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +17,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeActivity : AppCompatActivity()
 {
+    companion object {
+        const val ADD_ITEM_REQUEST_CODE = 1
+    }
 
     private val categories = listOf(
         CategorieModel(R.drawable.ic_hamburguer, "Hamburguesa"),
@@ -101,7 +105,7 @@ class HomeActivity : AppCompatActivity()
     {
         fabAddItem.setOnClickListener {
             val intent = Intent(this, AddItemActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, ADD_ITEM_REQUEST_CODE)
         }
     }
 
@@ -133,5 +137,20 @@ class HomeActivity : AppCompatActivity()
         filteredItems = items.filter { it.category == category }
         homeItemAdapter = HomeItemAdapter(filteredItems)
         homeVerticalRecyclerView.adapter = homeItemAdapter
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val name = data?.getStringExtra("ITEM_NAME") ?: return
+            val price = data.getIntExtra("ITEM_PRICE", 0)
+            val description = data.getStringExtra("ITEM_DESCRIPTION") ?: return
+            val category = data.getStringExtra("ITEM_CATEGORY") ?: return
+
+            val newItem = ItemModel(R.drawable.ic_pizza, name, price, description, category, "5.0") // Ajusta según sea necesario
+
+            items.add(newItem)
+            filterItemsByCategory(category)
+        }
     }
 }
