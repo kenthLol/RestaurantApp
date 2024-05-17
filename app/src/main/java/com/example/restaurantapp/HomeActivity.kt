@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.net.Uri
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ class HomeActivity : AppCompatActivity()
     companion object
     {
         const val ADD_ITEM_REQUEST_CODE = 1
+        const val EDIT_ITEM_REQUEST_CODE = 2
     }
 
     private val categories = listOf(
@@ -130,6 +132,12 @@ class HomeActivity : AppCompatActivity()
                 intent.putExtra("ITEM_DESCRIPTION", item.description)
                 startActivity(intent)
             }
+
+            override fun onItemLongClick(item: ItemModel)
+            {
+                showContextMenu(item)
+            }
+
         })
         homeVerticalRecyclerView.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false)
@@ -155,6 +163,10 @@ class HomeActivity : AppCompatActivity()
                 intent.putExtra("ITEM_RATING", item.rating)
                 intent.putExtra("ITEM_DESCRIPTION", item.description)
                 startActivity(intent)
+            }
+
+            override fun onItemLongClick(item: ItemModel) {
+                showContextMenu(item)
             }
         })
         homeVerticalRecyclerView.adapter = homeItemAdapter
@@ -184,5 +196,42 @@ class HomeActivity : AppCompatActivity()
             items.add(newItem)
             filterItemsByCategory(category)
         }
+    }
+
+    private fun showContextMenu(item: ItemModel)
+    {
+        val options = arrayOf("Editar", "Eliminar")
+        AlertDialog.Builder(this)
+            .setItems(options) { dialog, which ->
+                when (which)
+                {
+                    0 -> {
+                        val intent = Intent(this, EditItemActivity::class.java)
+                        intent.putExtra("ITEM_IMAGE_URI", item.image.toString())
+                        intent.putExtra("ITEM_NAME", item.title)
+                        intent.putExtra("ITEM_PRICE", item.price)
+                        intent.putExtra("ITEM_DESCRIPTION", item.description)
+                        intent.putExtra("ITEM_CATEGORY", item.category)
+                        startActivityForResult(intent, EDIT_ITEM_REQUEST_CODE)
+                    }
+                    1 -> {
+                        // Delete option selected
+                        showDeleteConfirmationDialog(item)
+                    }
+                }
+            }
+            .show()
+    }
+
+    private fun showDeleteConfirmationDialog(item: ItemModel) {
+        AlertDialog.Builder(this)
+            .setTitle("Confirmar Eliminación")
+            .setMessage("¿Estás seguro de que deseas eliminar este ítem?")
+            .setPositiveButton("Sí") { dialog, which ->
+                items.remove(item)
+                filterItemsByCategory(if (selectedCategoryIndex != -1) categories[selectedCategoryIndex].title else "")
+            }
+            .setNegativeButton("No", null)
+            .show()
     }
 }

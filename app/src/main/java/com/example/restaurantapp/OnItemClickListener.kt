@@ -5,4 +5,5 @@ import com.example.restaurantapp.models.ItemModel
 interface OnItemClickListener
 {
     fun onItemClick(item: ItemModel)
+    fun onItemLongClick(item: ItemModel)
 }

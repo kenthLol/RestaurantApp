@@ -46,10 +46,15 @@ class HomeItemAdapter(private var itemList: List<ItemModel>, private var listene
             itemPrice.text = "$${item.price}"
             itemDescription.text = item.description
             itemRating.text = item.rating
-        }
 
-        init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener{
+                listener.onItemClick(item)
+            }
+
+            itemView.setOnLongClickListener{
+                listener.onItemLongClick(item)
+                true
+            }
         }
 
         override fun onClick(v: View?) {
