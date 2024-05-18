@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="¡Buenos días! Kenneth"
+                android:text="¡Buenos días!"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -42,10 +42,11 @@
 
             <EditText
                 android:id="@+id/searchBar"
-                android:layout_width="300dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/search_bg"
                 android:drawableStart="@drawable/ic_search"
                 android:drawablePadding="9dp"
@@ -54,8 +55,21 @@
                 android:padding="10dp"
                 android:textColor="@color/white"
                 android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@id/logoutButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/greetingText" />
+
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="10dp"
+                android:text="Cerrar sesión"
+                android:textSize="10sp"
+                android:backgroundTint="@color/green_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/searchBar" />
 
             <TextView
                 android:id="@+id/titleCategories"

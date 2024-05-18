@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.net.Uri
+import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -89,6 +90,7 @@ class HomeActivity : AppCompatActivity()
 
     private var selectedCategoryIndex = -1
     private lateinit var fabAddItem: FloatingActionButton
+    private lateinit var logoutButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -105,6 +107,12 @@ class HomeActivity : AppCompatActivity()
         fabAddItem.setOnClickListener {
             val intent = Intent(this, AddItemActivity::class.java)
             startActivityForResult(intent, ADD_ITEM_REQUEST_CODE)
+        }
+
+        logoutButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 
@@ -149,6 +157,7 @@ class HomeActivity : AppCompatActivity()
         homeHorizontalRecyclerView = findViewById(R.id.home_categories)
         homeVerticalRecyclerView = findViewById(R.id.homeItems)
         fabAddItem = findViewById(R.id.fabAddItem)
+        logoutButton = findViewById(R.id.logoutButton)
     }
 
     private fun filterItemsByCategory(category: String)
