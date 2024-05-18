@@ -29,6 +29,12 @@ class HomeItemAdapter(private var itemList: List<ItemModel>, private var listene
         return itemList.size
     }
 
+    fun updateItems(newItems: List<ItemModel>)
+    {
+        itemList = newItems
+        notifyDataSetChanged()
+    }
+
     inner class HomeItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener
     {
         private val itemImage: ImageView = itemView.findViewById(R.id.imageViewDish)

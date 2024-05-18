@@ -175,26 +175,44 @@ class HomeActivity : AppCompatActivity()
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK)
+        if (resultCode == Activity.RESULT_OK)
         {
-            val name = data?.getStringExtra("ITEM_NAME") ?: return
-            val price = data.getIntExtra("ITEM_PRICE", 0)
-            val description = data.getStringExtra("ITEM_DESCRIPTION") ?: return
-            val category = data.getStringExtra("ITEM_CATEGORY") ?: return
-            val imageUriString = data.getStringExtra("ITEM_IMAGE_URI")
-            val imageUri = if (imageUriString != null) Uri.parse(imageUriString) else null
+            when (requestCode)
+            {
+                ADD_ITEM_REQUEST_CODE ->
+                {
+                    val name = data?.getStringExtra("ITEM_NAME") ?: return
+                    val price = data.getIntExtra("ITEM_PRICE", 0)
+                    val description = data.getStringExtra("ITEM_DESCRIPTION") ?: return
+                    val category = data.getStringExtra("ITEM_CATEGORY") ?: return
+                    val imageUriString = data.getStringExtra("ITEM_IMAGE_URI")
+                    val imageUri = if (imageUriString != null) Uri.parse(imageUriString) else null
 
-            val newItem = ItemModel(
-                imageUri,
-                name,
-                price,
-                description,
-                category,
-                "5.0"
-            )
+                    val newItem = ItemModel(
+                        imageUri,
+                        name,
+                        price,
+                        description,
+                        category,
+                        "5.0"
+                    )
 
-            items.add(newItem)
-            filterItemsByCategory(category)
+                    items.add(newItem)
+                    filterItemsByCategory(category)
+                }
+                EDIT_ITEM_REQUEST_CODE ->
+                {
+                    val originalName = data?.getStringExtra("ORIGINAL_ITEM_NAME") ?: return
+                    val name = data.getStringExtra("ITEM_NAME") ?: return
+                    val price = data.getIntExtra("ITEM_PRICE", 0)
+                    val description = data.getStringExtra("ITEM_DESCRIPTION") ?: return
+                    val category = data.getStringExtra("ITEM_CATEGORY") ?: return
+                    val imageUriString = data.getStringExtra("ITEM_IMAGE_URI")
+                    val imageUri = if (imageUriString != null) Uri.parse(imageUriString) else null
+
+                    updateItemInList(originalName, name, price, description, category, imageUri)
+                }
+            }
         }
     }
 
@@ -233,5 +251,18 @@ class HomeActivity : AppCompatActivity()
             }
             .setNegativeButton("No", null)
             .show()
+    }
+
+    private fun updateItemInList(originalName: String, name: String, price: Int, description: String, category: String, imageUri: Uri?) {
+        val itemIndex = items.indexOfFirst { it.title == originalName }
+        if (itemIndex != -1) {
+            val item = items[itemIndex]
+            item.title = name
+            item.price = price
+            item.description = description
+            item.category = category
+            item.image = imageUri
+            filterItemsByCategory(category)
+        }
     }
 }
