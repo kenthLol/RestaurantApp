@@ -2,6 +2,8 @@ package com.example.restaurantapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -17,20 +19,22 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var confirmPasswordEditText: EditText
+    private lateinit var nameEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
 
+        initComponents()
+
         auth = FirebaseAuth.getInstance()
 
-        registerButton = findViewById(R.id.loginButton)
-        logInButton = findViewById(R.id.logInTextButton)
-        emailEditText = findViewById(R.id.emailEditText)
-        passwordEditText = findViewById(R.id.passwordEditText)
-        confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText)
+        initListeners()
+    }
 
+    private fun initListeners()
+    {
         logInButton.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -50,15 +54,42 @@ class RegisterActivity : AppCompatActivity() {
                                 startActivity(intent)
                                 finish()
                             } else {
-                                Toast.makeText(baseContext, "Registration failed.",
+                                Toast.makeText(baseContext, "Registro fallido.",
                                     Toast.LENGTH_SHORT).show()
                             }
                         }
                 } else {
-                    Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Por favor llenar todos los campos.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        setEnterKeyListener(nameEditText)
+        setEnterKeyListener(emailEditText)
+        setEnterKeyListener(passwordEditText)
+        setEnterKeyListener(confirmPasswordEditText)
+    }
+
+    private fun initComponents()
+    {
+        registerButton = findViewById(R.id.loginButton)
+        logInButton = findViewById(R.id.logInTextButton)
+        emailEditText = findViewById(R.id.emailEditText)
+        passwordEditText = findViewById(R.id.passwordEditText)
+        confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText)
+        nameEditText = findViewById(R.id.nameEditText)
+    }
+
+    private fun setEnterKeyListener(editText: EditText) {
+        editText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                // Evita que se añada una nueva línea
+                true
+            } else {
+                false
             }
         }
     }

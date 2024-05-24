@@ -2,6 +2,8 @@ package com.example.restaurantapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -22,13 +24,15 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
+        initComponents()
+
         auth = FirebaseAuth.getInstance()
 
-        logInButton = findViewById(R.id.loginButton)
-        registerButton = findViewById(R.id.registerAccount)
-        emailEditText = findViewById(R.id.emailEditText)
-        passwordEditText = findViewById(R.id.passwordEditText)
+        initListeners()
+    }
 
+    private fun initListeners()
+    {
         registerButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
@@ -45,12 +49,35 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else {
-                            Toast.makeText(baseContext, "Authentication failed.",
+                            Toast.makeText(baseContext, "Autenticación fallida.",
                                 Toast.LENGTH_SHORT).show()
                         }
                     }
             } else {
-                Toast.makeText(this, "Please enter email and password.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Por favor ingresa el correo y la contraseña.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        setEnterKeyListener(emailEditText)
+        setEnterKeyListener(passwordEditText)
+    }
+
+    private fun initComponents()
+    {
+        logInButton = findViewById(R.id.loginButton)
+        registerButton = findViewById(R.id.registerAccount)
+        emailEditText = findViewById(R.id.emailEditText)
+        passwordEditText = findViewById(R.id.passwordEditText)
+    }
+
+    private fun setEnterKeyListener(editText: EditText) {
+        editText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                // Evita que se añada una nueva línea
+                true
+            } else {
+                false
             }
         }
     }
