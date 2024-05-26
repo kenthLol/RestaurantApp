@@ -1,5 +1,6 @@
 package com.example.restaurantapp
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
@@ -16,7 +17,7 @@ class ItemDetailActivity : AppCompatActivity()
     private lateinit var tvNameSelected: TextView
     private lateinit var tvRatingSelected: TextView
     private lateinit var tvDescriptionSelected: TextView
-    private lateinit var buttonReservateNow: Button
+    private lateinit var reservateNowButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -25,6 +26,7 @@ class ItemDetailActivity : AppCompatActivity()
         enableEdgeToEdge()
         setContentView(R.layout.activity_item_detail)
         initComponents()
+        initListeners()
 
         val imageUriString = intent.getStringExtra("ITEM_IMAGE_URI")
         val imageUri = if (imageUriString != null) Uri.parse(imageUriString) else null
@@ -38,12 +40,20 @@ class ItemDetailActivity : AppCompatActivity()
         tvDescriptionSelected.text = description
     }
 
+    private fun initListeners()
+    {
+        reservateNowButton.setOnClickListener {
+            val intent = Intent(this, PaymentConfirmationActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
     private fun initComponents()
     {
         imgItemSelected = findViewById(R.id.img_item_selected)
         tvNameSelected = findViewById(R.id.tv_name_selected)
         tvRatingSelected = findViewById(R.id.tv_rating_selected)
         tvDescriptionSelected = findViewById(R.id.tv_description_selected)
-        buttonReservateNow = findViewById(R.id.button_reservate_now)
+        reservateNowButton = findViewById(R.id.button_reservate_now)
     }
 }

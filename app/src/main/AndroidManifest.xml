@@ -15,6 +15,9 @@
         android:theme="@style/Theme.RestaurantApp"
         tools:targetApi="31">
         <activity
+            android:name=".PaymentConfirmationActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditItemActivity"
             android:exported="false" />
         <activity
